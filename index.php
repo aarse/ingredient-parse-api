@@ -184,9 +184,9 @@ function ingredients_to_shopping_list($ingredients) {
 				'unit' => $ingredient['unit'],
 				'amount' => 0
 			];
-			if ( is_numeric( $ingredient['float_qty'] ) ) {
-				$grouped_ingredients[$ingredient['name'] . '::' . $ingredient['unit']]['amount'] += (float) $ingredient['float_qty'];
-			}
+		}
+		if ( is_numeric( $ingredient['float_qty'] ) ) {
+			$grouped_ingredients[$ingredient['name'] . '::' . $ingredient['unit']]['amount'] += (float) $ingredient['float_qty'];
 		}
 	}
 	foreach( $grouped_ingredients as &$ingredient ) {
