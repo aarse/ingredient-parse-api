@@ -1,17 +1,104 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-//header('Content-Type: application/json');
 
 if ( ! empty( $_POST['ingredients'] ) ) {
+	header('Content-Type: application/json');
 	$ingredients = parse_ingredients( $_POST['ingredients'] );
 	$response = $ingredients;
 	if ( $_GET['action'] == 'shopping_list' ) {
 		$response = ingredients_to_shopping_list($ingredients);
 	}
-	//var_dump($ingredients,$response);
 	echo json_encode($response);
 } else {
-	echo "{}";
+?>
+<title>AARSE Ingredients Parsing API</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<style>
+	body {
+		background: tomato;
+		margin: 0;
+		padding: 0;
+	}
+	h1 {
+		color: lemonchiffon;
+		font-size: 5em;
+		text-align: center;
+		margin: .5em auto;
+	}
+
+	.row {
+		display: flex;
+		flex-wrap: wrap; /* 2 */
+	}
+	.col {
+		flex: 1 0 5em;
+		margin: 0.5em;
+	}
+	textarea, pre {
+		width: 100%;
+		background: lemonchiffon;
+		color: black;
+		font-family: monospace;
+		min-height: 200px;
+		vertical-align: top;
+		margin: 0;
+		border: 0;
+	}
+	button {
+		background: brown;
+		border: none;
+		padding: 1em 2em;
+		margin: 1em 0;
+		float: right;
+		color: lemonchiffon;
+		font-weight: bold;
+		font-size: 1.5em;
+	}
+	label {
+		color: lemonchiffon;
+		padding: 1em 0;
+		font-size: 1.25em;
+		font-weight: bold;
+	}
+</style>
+<h1>AARSE Ingredients Parsing API</h1>
+
+<div class="row">
+	<div class="col">
+		<label for="ingredients">Paste your ingredients here</label>
+		<textarea id="ingredients" cols="30" rows="10">
+1 tablespoon finely ground coffee
+2 teaspoons chili powder
+1 teaspoon onion powder
+1 teaspoon coarsely ground pepper
+1 teaspoon ground mustard
+1/2 teaspoon salt
+1/2 teaspoon garlic powder
+1/2 teaspoon dried oregano
+1/4 teaspoon cayenne pepper
+1 beef ribeye roast (4 to 5 pounds)
+2 tablespoons olive oil
+		</textarea>
+		<button id="parse">Try it!</button>
+	</div>
+	<div class="col">
+		<label for="results">See awesome JSON here</label>
+		<pre id="results"></pre>
+	</div>
+</div>
+<script>
+	(function($){
+		$(function(){
+			$('#parse').on('click',function(){
+				$.post('/',{ ingredients:$('#ingredients').val() }).then(function(json_response){
+					$('#results').text(JSON.stringify(json_response, null, 4));
+				});
+			});
+		})
+	})(jQuery);
+</script>
+<?php
 }
 
 function parse_ingredients($ingredients_str) {
